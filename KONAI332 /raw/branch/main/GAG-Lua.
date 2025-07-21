@@ -1,0 +1,160 @@
+
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Main GUI
+local screenGui = Instance.new("ScreenGui", playerGui)
+screenGui.Name = "PetLevelerUI"
+screenGui.ResetOnSpawn = false
+
+-- UI corner styling
+local function roundify(obj)
+	local corner = Instance.new("UICorner", obj)
+	corner.CornerRadius = UDim.new(0, 10)
+end
+
+-- Start Button
+local startButton = Instance.new("TextButton", screenGui)
+startButton.Size = UDim2.new(0, 200, 0, 50)
+startButton.Position = UDim2.new(0.5, -100, 0.4, 0)
+startButton.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
+startButton.Text = "▶️ Start"
+startButton.TextSize = 22
+startButton.Font = Enum.Font.GothamBold
+startButton.TextColor3 = Color3.new(1, 1, 1)
+roundify(startButton)
+
+-- Countdown Label (for 15s wait)
+local countdownLabel = Instance.new("TextLabel", screenGui)
+countdownLabel.Size = UDim2.new(0, 250, 0, 50)
+countdownLabel.Position = UDim2.new(0.5, -125, 0.47, 0)
+countdownLabel.BackgroundTransparency = 1
+countdownLabel.Text = ""
+countdownLabel.Font = Enum.Font.Gotham
+countdownLabel.TextSize = 20
+countdownLabel.TextColor3 = Color3.new(1, 1, 1)
+
+-- Main Panel Frame
+local mainFrame = Instance.new("Frame", screenGui)
+mainFrame.Size = UDim2.new(0, 260, 0, 190)
+mainFrame.Position = UDim2.new(0.5, -130, 0.3, 0)
+mainFrame.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
+mainFrame.Visible = false
+roundify(mainFrame)
+
+-- Make GUI Draggable
+mainFrame.Active = true
+mainFrame.Draggable = true
+
+-- Title
+local title = Instance.new("TextLabel", mainFrame)
+title.Size = UDim2.new(1, 0, 0, 40)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "🐺 Level Up Your Pets"
+title.Font = Enum.Font.GothamBlack
+title.TextSize = 20
+title.TextColor3 = Color3.fromRGB(255, 70, 70)
+
+-- Hold Pet Label (NEW)
+local holdPetLabel = Instance.new("TextLabel", mainFrame)
+holdPetLabel.Size = UDim2.new(1, 0, 0, 25)
+holdPetLabel.Position = UDim2.new(0, 0, 0, 40)
+holdPetLabel.BackgroundTransparency = 1
+holdPetLabel.Text = "PLEASE HOLD A PET"
+holdPetLabel.Font = Enum.Font.Gotham
+holdPetLabel.TextSize = 16
+holdPetLabel.TextColor3 = Color3.fromRGB(255, 200, 200)
+
+-- Level Up Button
+local levelButton = Instance.new("TextButton", mainFrame)
+levelButton.Size = UDim2.new(0.8, 0, 0, 40)
+levelButton.Position = UDim2.new(0.1, 0, 0.45, 0)
+levelButton.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+levelButton.Text = "🔥 Level Up 50+ Instantly"
+levelButton.Font = Enum.Font.GothamBold
+levelButton.TextSize = 18
+levelButton.TextColor3 = Color3.new(1, 1, 1)
+roundify(levelButton)
+
+-- Footer
+local footer = Instance.new("TextLabel", mainFrame)
+footer.Size = UDim2.new(1, 0, 0, 30)
+footer.Position = UDim2.new(0, 0, 1, -30)
+footer.BackgroundTransparency = 1
+footer.Text = "Modified Script: zeno"
+footer.Font = Enum.Font.GothamSemibold
+footer.TextSize = 14
+footer.TextColor3 = Color3.fromRGB(180, 180, 180)
+
+-- Percentage Label over character
+local percentageLabel = Instance.new("BillboardGui", player.Character:WaitForChild("Head"))
+percentageLabel.Size = UDim2.new(0, 300, 0, 50)
+percentageLabel.StudsOffset = Vector3.new(0, 2.5, 0)
+percentageLabel.AlwaysOnTop = true
+percentageLabel.Enabled = false
+
+local percentText = Instance.new("TextLabel", percentageLabel)
+percentText.Size = UDim2.new(1, 0, 1, 0)
+percentText.BackgroundTransparency = 1
+percentText.Text = ""
+percentText.TextColor3 = Color3.fromRGB(255, 0, 0)
+percentText.Font = Enum.Font.GothamBlack
+percentText.TextSize = 28
+percentText.TextStrokeTransparency = 0.4
+
+-- Success Message
+local successMsg = Instance.new("BillboardGui", player.Character.Head)
+successMsg.Size = UDim2.new(0, 350, 0, 60)
+successMsg.StudsOffset = Vector3.new(0, 2.5, 0)
+successMsg.AlwaysOnTop = true
+successMsg.Enabled = false
+
+local successText = Instance.new("TextLabel", successMsg)
+successText.Size = UDim2.new(1, 0, 1, 0)
+successText.BackgroundTransparency = 1
+successText.Text = "✅ Your pet leveled up and its weight randomly shifted successfully!\nPLEASE REJOIN IN SERVER"
+successText.TextColor3 = Color3.fromRGB(0, 255, 0)
+successText.Font = Enum.Font.GothamBold
+successText.TextSize = 20
+successText.TextStrokeTransparency = 0.3
+successText.TextWrapped = true
+successText.TextYAlignment = Enum.TextYAlignment.Top
+
+-- Start Button Logic
+startButton.MouseButton1Click:Connect(function()
+	startButton.Visible = false
+	local countdown = 15
+	countdownLabel.Text = "⏳ Starting in 15 seconds..."
+	while countdown > 0 do
+		wait(1)
+		countdown -= 1
+		countdownLabel.Text = "⏳ Starting in " .. countdown .. " seconds..."
+	end
+	countdownLabel.Visible = false
+	mainFrame.Visible = true
+end)
+
+-- Level Up Button Logic
+levelButton.MouseButton1Click:Connect(function()
+	if not levelButton.Active then return end
+
+	levelButton.Active = false
+	levelButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+	levelButton.Text = "⏳ Leveling Up..."
+
+	percentageLabel.Enabled = true
+
+	local duration = 240 -- 4 minutes
+	local interval = duration / 100
+
+	for i = 1, 100 do
+		percentText.Text = "🔴 Pets Leveling Up Randomly! " .. i .. "%"
+		wait(interval)
+	end
+
+	percentageLabel.Enabled = false
+	successMsg.Enabled = true
+	wait(6)
+	successMsg.Enabled = false
+end)
